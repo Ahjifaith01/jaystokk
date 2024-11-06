@@ -1,4 +1,6 @@
 import React from 'react';
+import { Lia500Px } from 'react-icons/lia';
+import { Link } from 'react-router-dom';
 
 const Register: React.FC = () => {
   return (
@@ -43,16 +45,16 @@ const Register: React.FC = () => {
             />
           </div>
 
+          <Link className="text-white" to="/Home">
           <button
             type="submit"
             className="w-56 h-12 mt-4 bg-gradient-to-r from-black/60 to-[#106cb8] rounded-full border border-whitesmoke text-white shadow-lg transition hover:bg-blue-700"
-          >
-            Sign Up
-          </button>
+            >Sign Up
+           </button>
+          </Link>
         </form>
       </div>
     </div>
   );
 };
-
 export default Register;
