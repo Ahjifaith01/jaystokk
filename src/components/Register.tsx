@@ -1,5 +1,4 @@
 import React from 'react';
-import { Lia500Px } from 'react-icons/lia';
 import { Link } from 'react-router-dom';
 
 const Register: React.FC = () => {
