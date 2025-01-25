@@ -1,5 +1,6 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom"; // Import useLocation
+// src/components/Home.tsx
+import React, { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import { FaShoppingCart, FaRegCreditCard } from "react-icons/fa";
 import { RiChatHistoryFill } from "react-icons/ri";
 import { GrTransaction } from "react-icons/gr";
@@ -10,7 +11,32 @@ import { MdProductionQuantityLimits } from "react-icons/md";
 import { TiShoppingCart } from "react-icons/ti";
 
 const Home: React.FC = () => {
-  const location = useLocation(); // Get the current route
+  const [isCameraOn, setIsCameraOn] = useState<boolean>(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const handleConnectCamera = async (): Promise<void> => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      }
+      setIsCameraOn(true);
+    } catch (error) {
+      console.error("Error accessing the camera:", error);
+      alert(
+        "Unable to access the camera. Please ensure permissions are granted."
+      );
+    }
+  };
+
+  const handleStopCamera = (): void => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach((track) => track.stop());
+    }
+    setIsCameraOn(false);
+  };
 
   return (
     <div className="min-h-screen flex flex-col justify-between">
@@ -66,7 +92,7 @@ const Home: React.FC = () => {
         {/* Product Details and Other Options */}
         <div className="flex justify-around mb-5 w-full">
           <Link
-            to="/product-detail"
+            to="/product"
             className="bg-whitesmoke rounded-lg p-2 flex flex-col items-center"
           >
             <MdProductionQuantityLimits className="text-black" size={30} />
@@ -84,9 +110,12 @@ const Home: React.FC = () => {
 
         {/* More Options */}
         <div className="flex justify-around mb-5 w-full">
-          <div className="bg-whitesmoke rounded-lg p-2 flex flex-col items-center">
+          <div
+            className="bg-whitesmoke rounded-lg p-2 flex flex-col items-center cursor-pointer"
+            onClick={isCameraOn ? handleStopCamera : handleConnectCamera}
+          >
             <GiCctvCamera className="text-black" size={30} />
-            <span>Connect Camera</span>
+            <span>{isCameraOn ? "Stop Camera" : "Connect Camera"}</span>
           </div>
           <div className="bg-whitesmoke rounded-lg p-2 flex flex-col items-center">
             <TiShoppingCart className="text-black" size={30} />
@@ -97,17 +126,24 @@ const Home: React.FC = () => {
             <span>History</span>
           </div>
         </div>
+
+        {/* Camera View */}
+        {isCameraOn && (
+          <div className="mt-4">
+            <video
+              ref={videoRef}
+              className="border rounded-lg"
+              width="320"
+              height="240"
+            />
+          </div>
+        )}
       </div>
 
       {/* Bottom Navigation */}
       <ul className="flex justify-evenly bg-[#106cb8] bg-gradient-to-r from-black/60 to-transparent rounded-t-lg shadow-lg p-2 w-full">
         <li>
-          <Link
-            to="/"
-            className={`text-white ${
-              location.pathname === "/" ? "pointer-events-none opacity-50" : ""
-            }`}
-          >
+          <Link className="text-white" to="/">
             Home
           </Link>
         </li>

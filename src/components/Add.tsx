@@ -7,6 +7,7 @@ interface Product {
   image: string | null;
   name: string;
   id: string;
+  Quantity: string;
   buyRate: string;
   color: string;
   date: string;
@@ -17,6 +18,7 @@ const Add: React.FC = () => {
     image: null,
     name: "",
     id: "",
+    Quantity: "",
     buyRate: "",
     color: "",
     date: "",
@@ -54,6 +56,7 @@ const Add: React.FC = () => {
       image: null,
       name: "",
       id: "",
+      Quantity: "",
       buyRate: "",
       color: "",
       date: "",
@@ -96,6 +99,17 @@ const Add: React.FC = () => {
               value={product.id}
               onChange={handleChange}
               placeholder="E.g"
+              className="mt-1 block w-full h-10 border border-whitesmoke rounded-lg p-2 shadow-md"
+            />
+          </label>
+          <label className="block">
+            <span className="text-gray-700">Quantity</span>
+            <input
+              type="text"
+              name="Quantity"
+              value={product.Quantity}
+              onChange={handleChange}
+              placeholder="E.g 4.5"
               className="mt-1 block w-full h-10 border border-whitesmoke rounded-lg p-2 shadow-md"
             />
           </label>
